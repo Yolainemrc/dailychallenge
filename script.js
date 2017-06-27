@@ -1,5 +1,6 @@
 $( document ).ready(function() {
   welcome()
+  loadChallenges();
 })
 function welcome() {
     var name= getUsername();
@@ -42,5 +43,34 @@ function getUsername() {
     }
 }
 
-getUsername();
 
+function loadChallenges() {
+  $.ajax(
+        {url : 'https://api.myjson.com/bins/1542ln',
+        type: 'GET',
+        dataType: 'json'} 
+  )
+  .done(function(data) {
+    showChallenge(data);
+  })
+  .fail(function() {
+    alert( "error" );
+  });
+}
+
+function showChallenge(liste) {
+
+  var data="";
+
+  for ( var i=0; i < liste.length; i++) {
+    data+="<div class='defi'>";
+    var challenge=liste[i];
+
+    data+='<h2>'+challenge.nom+'</h2>';
+    data+='<p>'+challenge.description+'</p>';
+    data+='<iframe width="364" height="204" src="'+challenge.youtube+'" frameborder="0" allowfullscreen></iframe>'
+    data+="</div>";
+  }
+  $("#defis").html(data);
+
+}
